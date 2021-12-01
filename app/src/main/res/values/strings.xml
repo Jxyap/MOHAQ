@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">MOHAQ</string>
+    <string name="register_btn">Register</string>
+    <string name="navigation_monitor">Monitor</string>
+    <string name="navigation_settings">Settings</string>
+    <string name="title_activity_main2">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="settings">Settings</string>
+    <string name="all_sensor">All Sensor</string>
+    <string name="temperature_and_humidity_sensor">Temperature and humidity Sensor</string>
+    <string name="ammonia_sensor">Ammonia Sensor</string>
+    <string name="carbon_monoxide_sensor">Carbon Monoxide Sensor</string>
+    <string-array name="analysis_type">
+        <item>no selection</item>
+        <item>Day</item>
+        <item>Week</item>
+        <item>Month</item>
+    </string-array>
+</resources>

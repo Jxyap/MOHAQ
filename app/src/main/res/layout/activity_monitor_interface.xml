@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4ea8de"
+    tools:context=".MonitorInterface">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardBackgroundColor="#64dfdf"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardElevation="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:text="Sensor Reading"
+            android:textSize="35sp" />
+
+    </androidx.cardview.widget.CardView>
+
+    <RelativeLayout
+        android:id="@+id/tempLayout"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="96dp"
+        android:background="@drawable/rounded_square_border"
+        android:clickable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Temperature"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/TempRead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="40sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/coLayout"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="308dp"
+        android:background="@drawable/rounded_square_border"
+        android:clickable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="CO VALUE"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/coRead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="30sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="ppm"
+            android:textSize="40sp"
+            tools:layout_editor_absoluteX="101dp"
+            tools:layout_editor_absoluteY="385dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/nh3Layout"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginTop="308dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/rounded_square_border"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="NH3 VALUE"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/nh3Read"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_horizontal"
+            android:textSize="30sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="ppm"
+            android:textSize="40sp"
+            tools:layout_editor_absoluteX="101dp"
+            tools:layout_editor_absoluteY="385dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/humiLayout"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/rounded_square_border"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Humidity"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/humidityRead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="40sp" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "184560201101",
+    "firebase_url": "https://mohaq-bcf25-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "mohaq-bcf25",
+    "storage_bucket": "mohaq-bcf25.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184560201101:android:2ae85bb60b2fbf0af221c4",
+        "android_client_info": {
+          "package_name": "com.example.mohaq"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "184560201101-0bs7lrt6ds74jofv1bvd39jvppqnjedl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJhzn_UrGOoS997-_XoAhu1UAyAkSxbj0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "184560201101-0bs7lrt6ds74jofv1bvd39jvppqnjedl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

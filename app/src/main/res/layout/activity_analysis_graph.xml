@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4ea8de"
+    tools:context=".analysisGraph">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" >
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="380dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:cardElevation="5dp"
+            app:cardBackgroundColor="#64dfdf"
+            app:cardUseCompatPadding="true"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="10dp">
+
+            <TextView
+                android:id="@+id/tv_analysisType"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Type"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:textSize="30sp" />
+
+        </androidx.cardview.widget.CardView>
+
+        <Spinner
+            android:id="@+id/spinner_type"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/rounded_square_border"/>
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/aGraph"
+            android:layout_width="380dp"
+            android:layout_height="420dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
