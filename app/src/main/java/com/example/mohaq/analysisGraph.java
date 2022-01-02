@@ -372,8 +372,4 @@ public class analysisGraph extends AppCompatActivity {
         SimpleDateFormat date = new SimpleDateFormat("yyyyMMdd");
         return date.format(startOfMonth);
     }
-
-    public void XAxishide(){
-        aGraph.getXAxis().setDrawLabels(false);
-    }
 }
