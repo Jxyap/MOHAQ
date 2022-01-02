@@ -2,7 +2,11 @@ package com.example.mohaq;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -96,6 +100,8 @@ public class monitorInterface extends AppCompatActivity {
                 startActivity(analysisIntent);
             }
         });
+
+        Notification();
     }
 
     private void searchDevice(){
@@ -143,5 +149,67 @@ public class monitorInterface extends AppCompatActivity {
         SimpleDateFormat date  = new SimpleDateFormat("yyyyMMdd");
         Date todayDate = new Date();
         return date.format(todayDate);
+    }
+
+    @Override
+    protected void onPause() {
+        Notification();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        Notification();
+        super.onResume();
+    }
+
+    public void Notification(){
+        dRef = FirebaseDatabase.getInstance().getReference();
+        dRef.child("User").child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String device = snapshot.child("device").getValue(String.class);
+                dRef.child("Device").child(device).child("Notification").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot ds:snapshot.getChildren()){
+                            if(ds.getValue(String.class).matches("true")){
+                                createNotification(ds.getKey());
+                                dRef.child("Device").child(device).child("Notification").child(ds.getKey()).setValue("false");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void createNotification(String Factor){
+        String title = "MOHAQ Alert";
+        String text = "Factor: "+Factor+"is exceed threshold! Please take action!";
+        final String CHANNEL_ID = "HEADS_UP_NOTIFICATION";
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "Heads Up Notification",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+        }
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.humidity_icon)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        NotificationManagerCompat.from(this).notify(1, notification.build());
     }
 }
