@@ -433,7 +433,7 @@ public class analysisGraph extends AppCompatActivity {
             );
         }
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.humidity_icon)
+                .setSmallIcon(R.drawable.logo)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);

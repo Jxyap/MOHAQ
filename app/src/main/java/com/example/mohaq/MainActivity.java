@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         if(user != null){
             register.setVisibility(View.INVISIBLE);
             homepage_btn.setVisibility(View.VISIBLE);
+	    Notification();
         }
         else{
             register.setVisibility(View.VISIBLE);
@@ -63,8 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, monitorInterface.class));
             }
         });
-
-        Notification();
     }
 
     @Override
@@ -74,13 +73,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        Notification();
+	if(user != null){
+            Notification();
+	}
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        Notification();
+        if(user != null){
+            Notification();
+	}
         super.onResume();
     }
 
@@ -127,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             );
         }
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.humidity_icon)
+                .setSmallIcon(R.drawable.logo)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
