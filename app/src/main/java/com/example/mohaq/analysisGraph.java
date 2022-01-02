@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
+import android.icu.text.LocaleDisplayNames;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Logger;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -36,18 +38,19 @@ import java.util.Date;
 
 public class analysisGraph extends AppCompatActivity {
 
-    Spinner aType;
-    LineChart aGraph;
-    TextView tv_type;
-    DatabaseReference dRef;
-    XAxis xAxis;
-    FirebaseAuth mAuth;
-    FirebaseUser user;
-    String uid, device, spinnerValue, currentDate, firstDateOfWeek, firstDateOfMonth, AnalysisType, lastDateOfMonth;
+    private Spinner aType;
+    private LineChart aGraph;
+    private TextView tv_type;
+    private DatabaseReference dRef;
+    private XAxis xAxis;
+    private String uid;
+    private String device;
+    private String spinnerValue;
+    private String AnalysisType;
     private static final String TAG = "QueryActivity";
-    LineDataSet lineDataSet = new LineDataSet(null, "Sensor reading");
-    ArrayList<ILineDataSet> iLineDataSets = new ArrayList<>();
-    LineData lineData;
+    private LineDataSet lineDataSet = new LineDataSet(null, "Sensor reading");
+    private ArrayList<ILineDataSet> iLineDataSets = new ArrayList<>();
+    private LineData lineData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +63,8 @@ public class analysisGraph extends AppCompatActivity {
         aGraph = findViewById(R.id.aGraph);
         xAxis = aGraph.getXAxis();
 
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
         uid = user.getUid();
         searchDevice();
     }
@@ -143,19 +146,56 @@ public class analysisGraph extends AppCompatActivity {
     }
 
     private void dayGraph() {
-        currentDate = getDate();
+        String currentDate = getDate();
         dRef.child(currentDate).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int x = 0;
+                int amount = 0, size, compare_size = 0;
+                String key="", key_compare;
+                Float value, total=0.0f;
                 ArrayList<Entry> dataValue = new ArrayList<>();
                 ArrayList<String> date = new ArrayList<>();
                 if (snapshot.hasChildren()) {
+                    size = (int) snapshot.getChildrenCount();
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        Float data = ds.child(AnalysisType).getValue(Float.class);
-                        date.add(ds.getKey());
-                        dataValue.add(new Entry(x, data));
-                        x++;
+                        key_compare = ds.getKey().substring(0,2);
+                        value = ds.child(AnalysisType).getValue(Float.class);
+
+                        if(compare_size ==size-1){
+                            if(key.matches(key_compare)){
+                                total += value;
+                                amount++;
+                            }else {
+                                key = key_compare;
+                                amount = 1;
+                                total = value;
+                            }
+                            date.add(key+":00");
+                            dataValue.add(new Entry(x,(total/amount)));
+                            x++;
+                        }else {
+                            if(amount == 0){
+                                key = key_compare;
+                                total +=value;
+                                amount++;
+                            }else if(key.matches(key_compare)){
+                                total += value;
+                                amount++;
+                            }else{
+                                date.add(key+":00");
+                                dataValue.add(new Entry(x,(total/amount)));
+                                x++;
+                                key = key_compare;
+                                amount = 1;
+                                total = value;
+                            }
+                            compare_size++;
+                        }
+//                        Float data = ds.child(AnalysisType).getValue(Float.class);
+//                        date.add(ds.getKey());
+//                        dataValue.add(new Entry(x, data));
+//                        x++;
                     }
                     showChart(dataValue);
                     formatXaxis(date);
@@ -173,21 +213,35 @@ public class analysisGraph extends AppCompatActivity {
     }
 
     private void weekGraph() {
-        firstDateOfWeek = firstDayOfThisWeek();
-        dRef.orderByKey().startAt(firstDateOfWeek).limitToFirst(7).addValueEventListener(new ValueEventListener() {
+        String firstDateOfWeek = firstDayOfThisWeek();
+        String lastDateOfWeek = lastDayOfWeek();
+        dRef.orderByKey().startAt(firstDateOfWeek).endAt(lastDateOfWeek).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int x = 0;
                 ArrayList<Entry> dataValue = new ArrayList<>();
+                ArrayList<String> date = new ArrayList<>();
                 if (snapshot.hasChildren()) {
+                    int size;
                     for (DataSnapshot ds : snapshot.getChildren()) {
+                        Float total = 0.0f;
+                        int amount = 0;
+                        size = (int) ds.getChildrenCount();
                         for (DataSnapshot dsChild : ds.getChildren()) {
-                            Float data = dsChild.child(AnalysisType).getValue(Float.class);
-                            dataValue.add(new Entry(x, data));
-                            x++;
+                            Float value = dsChild.child(AnalysisType).getValue(Float.class);
+                            total +=value;
+
+                            if(amount==size-1){
+                                Float data = total/size;
+                                dataValue.add(new Entry(x, data));
+                                date.add(ds.getKey());
+                                x++;
+                            }else{
+                                amount++;
+                            }
                         }
                         showChart(dataValue);
-                        XAxishide();
+                        formatXaxis(date);
                     }
                 } else {
                     aGraph.clear();
@@ -203,22 +257,34 @@ public class analysisGraph extends AppCompatActivity {
     }
 
     private void monthGraph() {
-        firstDateOfMonth = firstDayOfMonth();
-        lastDateOfMonth = lastDayOfMonth();
+        String firstDateOfMonth = firstDayOfMonth();
+        String lastDateOfMonth = lastDayOfMonth();
         dRef.orderByKey().startAt(firstDateOfMonth).endAt(lastDateOfMonth).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int x = 0;
                 ArrayList<Entry> dataValue = new ArrayList<>();
+                ArrayList<String> date = new ArrayList<>();
                 if (snapshot.hasChildren()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
+                        Float total = 0.0f;
+                        int amount = 0;
+                        int size = (int) ds.getChildrenCount();
                         for (DataSnapshot dsChild : ds.getChildren()) {
-                            Float data = dsChild.child(AnalysisType).getValue(Float.class);
-                            dataValue.add(new Entry(x, data));
-                            x++;
+                            Float value = dsChild.child(AnalysisType).getValue(Float.class);
+                            total +=value;
+
+                            if(amount==size-1){
+                                Float data = total/size;
+                                dataValue.add(new Entry(x, data));
+                                date.add(ds.getKey());
+                                x++;
+                            }else{
+                                amount++;
+                            }
                         }
                         showChart(dataValue);
-                        XAxishide();
+                        formatXaxis(date);
                     }
                 } else {
                     aGraph.clear();
@@ -281,7 +347,17 @@ public class analysisGraph extends AppCompatActivity {
         return date.format(startOfWeek);
     }
 
-    public String firstDayOfMonth() {
+    private String lastDayOfWeek(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        calendar.add(Calendar.DATE,6);
+        Date endOfWeek = calendar.getTime();
+        SimpleDateFormat date = new SimpleDateFormat("yyyyMMdd");
+        return date.format(endOfWeek);
+    }
+
+    private String firstDayOfMonth() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         Date startOfMonth = calendar.getTime();

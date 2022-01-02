@@ -30,7 +30,6 @@ public class registerInterface extends AppCompatActivity {
     FirebaseAuth mAuth;
     EditText username_ed, device_ed;
     Button submit_btn;
-    String token;
     private String username, device;
     private ProgressDialog progressDialog;
 
@@ -68,16 +67,7 @@ public class registerInterface extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Device is empty!",Toast.LENGTH_SHORT).show();
             return;
         }
-
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                token = task.getResult().toString();
-                Log.d("token", token);
-                createAccount();
-            }
-        });
-
+        createAccount();
     }
 
     public void createAccount() {
@@ -109,8 +99,6 @@ public class registerInterface extends AppCompatActivity {
         dRef.child(mAuth.getUid()).setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                DatabaseReference dReference = FirebaseDatabase.getInstance().getReference("token");
-                dReference.child(device).child(token).child(mAuth.getUid()).setValue(token);
                 startActivity(new Intent(registerInterface.this, monitorInterface.class));
             }
         });
